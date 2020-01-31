@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "OldAppDemoRG" {
-  name = "__OldAppDemoRG__"
+  name = "OldAppDemoRG"
   location = "East US"
 }
 
@@ -25,7 +25,7 @@ output "fully_qualified_domain_name" {
 }
 
 resource "azurerm_app_service_plan" "OldAppDemoPlan" {
-  name                = "__OldAppDemoRG-appserviceplan__"
+  name                = "OldAppDemoRG-appserviceplan"
   location            = "${azurerm_resource_group.OldAppDemoRG.location}"
   resource_group_name = "${azurerm_resource_group.OldAppDemoRG.name}"
 
@@ -36,7 +36,7 @@ resource "azurerm_app_service_plan" "OldAppDemoPlan" {
 }
 
 resource "azurerm_app_service" "OldAppDemoRG" {
-  name                = "__OldAppDemoRG-app-service__"
+  name                = "OldAppDemoRG-app-service"
   location            = "${azurerm_resource_group.OldAppDemoRG.location}"
   resource_group_name = "${azurerm_resource_group.OldAppDemoRG.name}"
   app_service_plan_id = "${azurerm_app_service_plan.OldAppDemoPlan.id}"
@@ -57,7 +57,7 @@ resource "azurerm_app_service" "OldAppDemoRG" {
 }
 
 resource "azurerm_application_insights" "OldAppDemoInsights" {
-  name                = "__OldAppDemo-appinsights__"
+  name                = "OldAppDemo-appinsights"
   location            = "East US"
   resource_group_name = "${azurerm_resource_group.OldAppDemoRG.name}"
   application_type    = "web"
@@ -71,7 +71,7 @@ output "app_id" {
   value = "${azurerm_application_insights.OldAppDemoInsights.app_id}"
 }
 resource "azurerm_redis_cache" "OldAppDemoRedis" {
-  name                = "__OldAppDemo-cache__"
+  name                = "OldAppDemo-cache"
   location            = "${azurerm_resource_group.OldAppDemoRG.location}"
   resource_group_name = "${azurerm_resource_group.OldAppDemoRG.name}"
   capacity            = 1
