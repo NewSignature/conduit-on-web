@@ -8,7 +8,7 @@ resource "azurerm_resource_group" "OldAppDemoRG" {
 }
 
 resource "azurerm_sql_server" "OldAppDemosqlserver" {
-  name                         = "__oldappdemo-sqlserver__"
+  name                         = "oldappdemo-sqlserver"
   resource_group_name          = "${azurerm_resource_group.OldAppDemoRG.name}"
   location                     = "${azurerm_resource_group.OldAppDemoRG.location}"
   version                      = "12.0"
