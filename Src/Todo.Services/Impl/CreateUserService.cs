@@ -11,7 +11,7 @@ using Todo.Web.ViewModels;
 
 namespace Todo.Services.Impl
 {
-    public class CreateUserService
+    public class CreateUserService : ICreateUserService
     {
         private readonly IContext _context;
         private readonly IPasswordHashService _passwordHashService;

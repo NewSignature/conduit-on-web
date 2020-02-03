@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Todo.Services.Impl
 {
-    public class PasswordHashService
+    public class PasswordHashService : IPasswordHashService
     {
         private const int SALT_SIZE = 10;
 

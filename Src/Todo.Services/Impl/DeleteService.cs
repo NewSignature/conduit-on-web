@@ -10,7 +10,7 @@ using Todo.Data.Entities;
 
 namespace Todo.Services.Impl
 {
-    public class DeleteService
+    public class DeleteService : IDeleteService
     {
         private readonly IContext _context;
 

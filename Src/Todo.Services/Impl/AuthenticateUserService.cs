@@ -9,7 +9,7 @@ using Todo.Data.Entities;
 
 namespace Todo.Services.Impl
 {
-    public class AuthenticateUserService
+    public class AuthenticateUserService : IAuthenticateUserService
     {
         private readonly IPasswordHashService _passwordHashService;
         private readonly IContext _context;

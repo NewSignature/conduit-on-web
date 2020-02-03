@@ -11,7 +11,7 @@ using Todo.Web.ViewModels;
 
 namespace Todo.Services.Impl
 {
-    public class SaveListItemService
+    public class SaveListItemService : ISaveListItemService
     {
         private readonly IContext _context;
 
