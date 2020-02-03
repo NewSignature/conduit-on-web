@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Todo.Services.Impl;
 
 namespace Todo.Services
 {
@@ -13,9 +14,12 @@ namespace Todo.Services
         {
             base.Load(builder);
 
-            builder.RegisterType<PasswordHashService>().AsSelf();
-            builder.RegisterType<CreateUserService>().AsSelf();
-            builder.RegisterType<AuthenticateUserService>().AsSelf();
+            builder.RegisterType<PasswordHashService>().As<IPasswordHashService>();
+            builder.RegisterType<CreateUserService>().As<ICreateUserService>();
+            builder.RegisterType<AuthenticateUserService>().As<IAuthenticateUserService>();
+            builder.RegisterType<SaveListService>().As<ISaveListService>();
+            builder.RegisterType<SaveListItemService>().As<ISaveListItemService>();
+            builder.RegisterType<DeleteService>().As<IDeleteService>();
         }
     }
 }

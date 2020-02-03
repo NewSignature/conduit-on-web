@@ -21,7 +21,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @if (SessionContext.Current.CurrentUser != null)
+                    {
                     <li>@Html.ActionLink("My Lists", "Index", "List")</li>
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (SessionContext.Current.CurrentUser == null)

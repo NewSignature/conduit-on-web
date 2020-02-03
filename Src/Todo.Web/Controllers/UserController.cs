@@ -5,17 +5,20 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Todo.Common;
 using Todo.Services;
+using Todo.Web.Context;
 using Todo.Web.ViewModels;
 
 namespace Todo.Web.Controllers
 {
     public class UserController : Controller
     {
-        private readonly CreateUserService _createUserService;
+        private readonly ICreateUserService _createUserService;
+        private readonly ISessionContext _sessionContext;
 
-        public UserController(CreateUserService createUserService)
+        public UserController(ICreateUserService createUserService, ISessionContext sessionContext)
         {
             _createUserService = createUserService;
+            _sessionContext = sessionContext;
         }
 
         [HttpGet]
@@ -36,7 +39,7 @@ namespace Todo.Web.Controllers
             {
                 // create the user
                 var newUser = await _createUserService.CreateUser(createUserRequest);
-                SessionContext.Current.CurrentUser = newUser;
+                _sessionContext.CurrentUser = newUser;
 
                 return RedirectToAction("Index", "List");
             }

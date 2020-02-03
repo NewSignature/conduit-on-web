@@ -143,8 +143,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Context\ISessionContext.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\ListItemController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -153,7 +155,7 @@
     <Compile Include="Injection\DependencyInstaller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionAuthorizeAttribute.cs" />
-    <Compile Include="SessionContext.cs" />
+    <Compile Include="Context\SessionContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -166,7 +168,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -194,6 +195,14 @@
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Views\Auth\Logout.cshtml" />
+    <Content Include="Views\List\Create.cshtml" />
+    <Content Include="Views\List\View.cshtml" />
+    <Content Include="Views\ListItem\Create.cshtml" />
+    <Content Include="Views\ListItem\View.cshtml" />
+    <Content Include="Views\List\Delete.cshtml" />
+    <Content Include="Views\List\Edit.cshtml" />
+    <Content Include="Views\ListItem\Delete.cshtml" />
+    <Content Include="Views\ListItem\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
