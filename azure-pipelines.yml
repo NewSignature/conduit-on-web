@@ -20,5 +20,15 @@ steps:
       vsVersion: latest
       configuration: Release
       clean: true
-      restoreNugetPackages: true
       msbuildArchitecture: x64
+
+  - task: VSTest@2
+    inputs:
+      testSelector: testAssemblies
+      testAssemblyVer2: Src/Todo.Tests/bin/*.Tests.dll
+      vsTestVersion: latest
+      codeCoverageEnabled: true
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: VSTest
