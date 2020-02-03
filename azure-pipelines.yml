@@ -31,6 +31,9 @@ steps:
       codeCoverageEnabled: true
 
   - script: |
+      dir Src
+      dir Src\Todo.Web
+      dir Src\Todo.Web\bin
       dir Src\Todo.Web\bin\Release
 
   - task: ArchiveFiles@2
