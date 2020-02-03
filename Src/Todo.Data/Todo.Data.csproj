@@ -81,6 +81,18 @@
     <Compile Include="Migrations\202001302244060_RemoveBirthDateFromUser.designer.cs">
       <DependentUpon>202001302244060_RemoveBirthDateFromUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001312139444_ForeignKeyDefinition.cs" />
+    <Compile Include="Migrations\202001312139444_ForeignKeyDefinition.designer.cs">
+      <DependentUpon>202001312139444_ForeignKeyDefinition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001312141492_FKColumnRename.cs" />
+    <Compile Include="Migrations\202001312141492_FKColumnRename.designer.cs">
+      <DependentUpon>202001312141492_FKColumnRename.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002021538208_RemovedIsCompleteFlagFromListItem.cs" />
+    <Compile Include="Migrations\202002021538208_RemovedIsCompleteFlagFromListItem.designer.cs">
+      <DependentUpon>202002021538208_RemovedIsCompleteFlagFromListItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TodoDataContext.cs" />
@@ -97,6 +109,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001302244060_RemoveBirthDateFromUser.resx">
       <DependentUpon>202001302244060_RemoveBirthDateFromUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001312139444_ForeignKeyDefinition.resx">
+      <DependentUpon>202001312139444_ForeignKeyDefinition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001312141492_FKColumnRename.resx">
+      <DependentUpon>202001312141492_FKColumnRename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002021538208_RemovedIsCompleteFlagFromListItem.resx">
+      <DependentUpon>202002021538208_RemovedIsCompleteFlagFromListItem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

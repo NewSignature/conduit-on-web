@@ -4,14 +4,23 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
+<h2>Your Lists</h2>
+@if (Model.Lists.Count == 0)
+{
+<div class="col-md-12">
+    You have no lists - @Html.ActionLink("Create One!!", "Create")
+</div>
+}
+else
+{
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th></th>
-    </tr>
 
-</table>
+<div class="table col-md-10">
+    @foreach (var list in Model.Lists)
+    {
+        <div>@Html.ActionLink(list.Title, "View", new { id = list.Id })</div>
+    }
+</div>
+}

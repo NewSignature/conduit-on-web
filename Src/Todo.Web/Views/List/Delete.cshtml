@@ -1,0 +1,21 @@
+﻿@model Todo.Web.ViewModels.TodoListViewModel
+
+@{
+    ViewBag.Title = "Delete List";
+}
+
+<h2>Really delete List @Model.Title</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+
+    @using (Html.BeginForm("ExecDelete", "List", new { id = Model.ListId }, FormMethod.Post, null)) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

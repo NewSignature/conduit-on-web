@@ -22,5 +22,8 @@ namespace Todo.Data.Entities
         public virtual IList<TodoListItem> Items { get; set; }
 
         public virtual User Owner { get; set; }
+
+        [ForeignKey(nameof(Owner))]
+        public Guid OwnerId { get; set; }
     }
 }

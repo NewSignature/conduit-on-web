@@ -4,17 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Todo.Services;
+using Todo.Web.Context;
 using Todo.Web.ViewModels;
 
 namespace Todo.Web.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly AuthenticateUserService _authenticateUserService;
+        private readonly IAuthenticateUserService _authenticateUserService;
+        private readonly ISessionContext _sessionContext;
 
-        public AuthController(AuthenticateUserService authenticateUserService)
+        public AuthController(IAuthenticateUserService authenticateUserService, ISessionContext sessionContext)
         {
             _authenticateUserService = authenticateUserService;
+            _sessionContext = sessionContext;
         }
 
         [HttpGet]
@@ -35,15 +38,26 @@ namespace Todo.Web.Controllers
             var authedUser = await _authenticateUserService.GetUserByUsernameAndPassword(
                 loginRequest.Username,
                 loginRequest.Password);
-            SessionContext.Current.CurrentUser = authedUser;
 
-            return RedirectToAction("Index", "List");
+            if (authedUser != null)
+            {
+                _sessionContext.CurrentUser = authedUser;
+
+                return RedirectToAction("Index", "List");
+            }
+            else
+            {
+                ModelState.AddModelError("OperationResult", "Username/Password combination not valid");
+                loginRequest.Password = string.Empty;
+
+                return View(loginRequest);
+            }
         }
 
         [HttpGet]
         public ActionResult Logout()
         {
-            if (SessionContext.Current.CurrentUser == null)
+            if (_sessionContext.CurrentUser == null)
                 return RedirectToAction("Index", "Main");
 
             return View();
@@ -52,7 +66,7 @@ namespace Todo.Web.Controllers
         [HttpPost]
         public ActionResult ExecLogout()
         {
-            SessionContext.Current.CurrentUser = null;
+            _sessionContext.CurrentUser = null;
             return RedirectToAction("Login");
         }
     }

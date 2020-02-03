@@ -42,10 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateListItemViewModel.cs" />
+    <Compile Include="CreateListViewModel.cs" />
     <Compile Include="CreateUserViewModel.cs" />
+    <Compile Include="EditTodoListItemViewModel.cs" />
+    <Compile Include="Extensions\ViewModelConvertExtensions.cs" />
     <Compile Include="ListIndexViewModel.cs" />
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TodoListItemViewModel.cs" />
+    <Compile Include="TodoListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Todo.Data\Todo.Data.csproj">

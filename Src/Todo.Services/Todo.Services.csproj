@@ -64,10 +64,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticateUserService.cs" />
-    <Compile Include="CreateUserService.cs" />
-    <Compile Include="PasswordHashService.cs" />
+    <Compile Include="IAuthenticateUserService.cs" />
+    <Compile Include="ICreateUserService.cs" />
+    <Compile Include="IDeleteService.cs" />
+    <Compile Include="Impl\AuthenticateUserService.cs" />
+    <Compile Include="Impl\CreateUserService.cs" />
+    <Compile Include="Impl\DeleteService.cs" />
+    <Compile Include="Impl\PasswordHashService.cs" />
+    <Compile Include="IPasswordHashService.cs" />
+    <Compile Include="ISaveListItemService.cs" />
+    <Compile Include="ISaveListService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Impl\SaveListItemService.cs" />
+    <Compile Include="Impl\SaveListService.cs" />
     <Compile Include="ServiceInjectionModule.cs" />
   </ItemGroup>
   <ItemGroup>

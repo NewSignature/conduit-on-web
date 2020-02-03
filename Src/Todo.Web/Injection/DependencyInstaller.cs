@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using Todo.Data;
 using Todo.Services;
+using Todo.Web.Context;
 
 namespace Todo.Web.Injection
 {
@@ -15,6 +16,7 @@ namespace Todo.Web.Injection
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            builder.RegisterType<SessionContext>().As<ISessionContext>().InstancePerRequest();
 
             builder.RegisterModule<DataInjectionModule>();
             builder.RegisterModule<ServiceInjectionModule>();

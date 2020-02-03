@@ -1,0 +1,51 @@
+﻿@model Todo.Web.ViewModels.TodoListViewModel
+
+@{
+    ViewBag.Title = $"Viewing {Model.Title}";
+}
+
+    <h2>@Model.Title</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Owner)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Owner)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+    </dl>
+
+    <hr />
+    <table class="table col-md-5">
+        <tr>
+            <th>Name</th>
+            <th>Completed On</th>
+            <th></th>
+        </tr>
+        @foreach(var item in Model.Items)
+        {
+            <tr>
+                <td>@Html.ActionLink(item.Name, "View", "ListItem", new { id = item.Id }, null)</td>
+                <td>@item.CompletedOn</td>
+                <td>@Html.ActionLink("Edit", "Edit", "ListItem", new { id = item.Id }, null)</td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink("Add Item", "Create", "ListItem", new { listId = Model.ListId }, null)
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ListId }) |
+    @Html.ActionLink("Delete", "Delete", new { id = Model.ListId }) |
+    @Html.ActionLink("Back to Lists", "Index")
+</p>
