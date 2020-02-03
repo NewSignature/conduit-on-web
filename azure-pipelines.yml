@@ -13,11 +13,6 @@ steps:
   - task: NuGetToolInstaller@1
     inputs:
       checkLatest: true
-  
-  - task: NuGetRestore@1
-    inputs:
-      solution: Src/TodoApplication.sln
-      packagesDirectory: Src/packages
 
   - task: VSBuild@1
     inputs:
@@ -26,6 +21,7 @@ steps:
       configuration: Release
       clean: true
       msbuildArchitecture: x64
+      restoreNugetPackages: true
 
   - task: VSTest@2
     inputs:
