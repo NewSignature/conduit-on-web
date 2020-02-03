@@ -29,7 +29,7 @@ steps:
   - task: VSTest@2
     inputs:
       testSelector: testAssemblies
-      testAssemblyVer2: Src/Todo.Tests/bin/*.Tests.dll
+      testAssemblyVer2: Src/Todo.Tests/bin/**/*.Tests.dll
       vsTestVersion: latest
       codeCoverageEnabled: true
 
