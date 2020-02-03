@@ -1,5 +1,0 @@
-C:\Projects\TodoApplication\Todo.Common\bin\Debug\Todo.Common.dll
-C:\Projects\TodoApplication\Todo.Common\bin\Debug\Todo.Common.pdb
-C:\Projects\TodoApplication\Todo.Common\obj\Debug\Todo.Common.csprojAssemblyReference.cache
-C:\Projects\TodoApplication\Todo.Common\obj\Debug\Todo.Common.dll
-C:\Projects\TodoApplication\Todo.Common\obj\Debug\Todo.Common.pdb

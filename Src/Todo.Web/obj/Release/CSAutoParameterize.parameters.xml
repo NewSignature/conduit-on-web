@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="TodoConnectionString-Web.config Connection String" description="TodoConnectionString Connection String used in web.config by the application to access the database." defaultValue="Server=.;Database=TodoApp  ;User Id=sa;Password=Password01;MultipleActiveResultSets=True;Connection Timeout=60" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\hammad\.aslam\\Documents\\GitHub\\Sampletodoapp\\Todo\.Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='TodoConnectionString']/@connectionString" />
-  </parameter>
-</parameters>
