@@ -31,7 +31,7 @@ steps:
       codeCoverageEnabled: true
 
   - script: |
-      dir Src/Todo.Web/bin/Release
+      dir Src\Todo.Web\bin\Release
 
   - task: ArchiveFiles@2
     inputs:
