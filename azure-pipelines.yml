@@ -30,15 +30,23 @@ steps:
       vsTestVersion: latest
       codeCoverageEnabled: true
 
-  - script: |
-      dir Src
-      dir Src\Todo.Web
-      dir Src\Todo.Web\bin
-      dir Src\Todo.Web\bin\Release
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: Src/Todo.Web/bin
+      Contents: |
+        *.dll
+        *.config
+      TargetFolder: output
+      CleanTargetFolder: true
 
   - task: ArchiveFiles@2
     inputs:
       archiveType: zip
-      rootFolderOrFile: Src/Todo.Web/bin/Release
+      rootFolderOrFile: output
       includeRootFolder: false
       archiveFile: $(Build.ArtifactDirectory)/TodoApp.$(Build.BuildId).zip
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: $(Build.ArtifactDirectory)/TodoApp.$(Build.BuildId).zip
+      ArtifactName: BuildOutput
