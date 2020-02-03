@@ -24,7 +24,7 @@ steps:
       restoreNugetPackages: true
 
   - script: |
-        dir Src/Todo.Tests/bin
+        dir Src\Todo.Tests\bin
 
   - task: VSTest@2
     inputs:
