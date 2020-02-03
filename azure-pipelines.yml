@@ -23,9 +23,6 @@ steps:
       msbuildArchitecture: x64
       restoreNugetPackages: true
 
-  - script: |
-        dir Src\Todo.Tests\bin
-
   - task: VSTest@2
     inputs:
       testSelector: testAssemblies
@@ -33,6 +30,12 @@ steps:
       vsTestVersion: latest
       codeCoverageEnabled: true
 
-  - task: PublishTestResults@2
+  - script: |
+      dir Src/Todo.Web/bin/Release
+
+  - task: ArchiveFiles@2
     inputs:
-      testResultsFormat: VSTest
+      archiveType: zip
+      rootFolderOrFile: Src/Todo.Web/bin/Release
+      includeRootFolder: false
+      archiveFile: $(Build.ArtifactDirectory)/TodoApp.$(Build.BuildId).zip
