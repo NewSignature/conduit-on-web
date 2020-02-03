@@ -23,6 +23,9 @@ steps:
       msbuildArchitecture: x64
       restoreNugetPackages: true
 
+  - script: |
+        dir Src/Todo.Tests/bin
+
   - task: VSTest@2
     inputs:
       testSelector: testAssemblies
