@@ -35,6 +35,14 @@ steps:
       vsTestVersion: latest
       codeCoverageEnabled: true
 
+  - task: MSBuild@1
+    inputs:
+      solution: Src/Todo.Web/*.csproj
+      msbuildArguments: '/t:Publish /p:ProductName="Super Todoer Demo App"
+        /p:PublishDir=output'
+      msbuildArchitecture: x64
+      configuration: Release
+
   - task: CopyFiles@2
     inputs:
       SourceFolder: Src/Todo.Web/bin
@@ -43,6 +51,7 @@ steps:
         *.config
       TargetFolder: output
       CleanTargetFolder: true
+    enabled: false
 
   - task: ArchiveFiles@2
     inputs:
