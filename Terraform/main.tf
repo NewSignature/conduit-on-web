@@ -76,7 +76,7 @@ resource "azurerm_app_service" "appsvc" {
   connection_string {
     name  = "Database"
     type  = "SQLServer"
-    value = "Server=${azurerm_sql_server.sqlserver.fqdn};Database=${azurerm_sql_database.database.name};User Id=nsadmin;Password=NewSignature2020;MultipleActiveResultSets=True;Connection Timeout=60"
+    value = "Server=${azurerm_sql_server.sqlserver.fully_qualified_domain_name};Database=${azurerm_sql_database.database.name};User Id=nsadmin;Password=NewSignature2020;MultipleActiveResultSets=True;Connection Timeout=60"
   }
 }
 
