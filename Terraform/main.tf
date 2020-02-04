@@ -14,7 +14,6 @@ variable "app_name" {
 
 data "azurerm_resource_group" "rg" {
   name = "${var.app_name}"
-  location = "East US"
 }
 
 resource "azurerm_sql_server" "sqlserver" {
