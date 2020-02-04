@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using Todo.Data.Entities;
+using Todo.Data.Migrations;
 
 namespace Todo.Data
 {
@@ -7,7 +8,7 @@ namespace Todo.Data
     {
         public TodoDataContext() : base("TodoConnectionString")
         {
-
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<TodoDataContext, Configuration>());
         }
 
         public IDbSet<User> Users { get; set; }
