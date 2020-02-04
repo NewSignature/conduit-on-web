@@ -30,6 +30,17 @@ resource "azurerm_sql_server" "sqlserver" {
 
 }
 
+resource "azurerm_sql_database" "database" {
+  name                = "${var.app_name}-auth-db"
+  resource_group_name = "${data.azurerm_resource_group.rg.name}"
+  location            = "${data.azurerm_resource_group.rg.location}"
+  server_name         = "${data.azurerm_sql_server.sql.name}"
+
+  tags = {
+    environment = "dev"
+  }
+}
+
 resource "azurerm_app_service_plan" "app_plan" {
   name                = "${var.app_name}-appserviceplan"
   location            = "${data.azurerm_resource_group.rg.location}"
@@ -58,7 +69,7 @@ resource "azurerm_app_service" "appsvc" {
   connection_string {
     name  = "Database"
     type  = "SQLServer"
-    value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
+    value = " "Server=${data.azurerm_sql_server.sql.fqdn};Database=${azurerm_sql_database.database.name};User Id=nsadmin;Password=NewSignature2020;MultipleActiveResultSets=True;Connection Timeout=60""
   }
 }
 
