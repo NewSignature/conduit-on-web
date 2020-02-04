@@ -12,15 +12,15 @@ variable "app_name" {
   type = "string"
 }
 
-resource "azurerm_resource_group" "rg" {
+data "azurerm_resource_group" "rg" {
   name = "${var.app_name}"
   location = "East US"
 }
 
-resource "azurerm_sql_server" "OldAppDemosqlserver" {
+resource "azurerm_sql_server" "sqlserver" {
   name                         = "${var.app_name}-sqlserver"
-  resource_group_name          = "${azurerm_resource_group.rg.name}"
-  location                     = "${azurerm_resource_group.rg.location}"
+  resource_group_name          = "${data.azurerm_resource_group.rg.name}"
+  location                     = "${data.azurerm_resource_group.rg.location}"
   version                      = "12.0"
   administrator_login          = "nsadmin"
   administrator_login_password = "NewSignature2020"
@@ -33,8 +33,8 @@ resource "azurerm_sql_server" "OldAppDemosqlserver" {
 
 resource "azurerm_app_service_plan" "app_plan" {
   name                = "${var.app_name}-appserviceplan"
-  location            = "${azurerm_resource_group.rg.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  location            = "${data.azurerm_resource_group.rg.location}"
+  resource_group_name = "${data.azurerm_resource_group.rg.name}"
 
   sku {
     tier = "Basic"
@@ -44,8 +44,8 @@ resource "azurerm_app_service_plan" "app_plan" {
 
 resource "azurerm_app_service" "appsvc" {
   name                = "${var.app_name}-app-service"
-  location            = "${azurerm_resource_group.rg.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  location            = "${data.azurerm_resource_group.rg.location}"
+  resource_group_name = "${data.azurerm_resource_group.rg.name}"
   app_service_plan_id = "${azurerm_app_service_plan.app_plan.id}"
 
   site_config {
@@ -66,14 +66,14 @@ resource "azurerm_app_service" "appsvc" {
 resource "azurerm_application_insights" "insights" {
   name                = "${var.app_name}-appinsights"
   location            = "East US"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  resource_group_name = "${data.azurerm_resource_group.rg.name}"
   application_type    = "web"
 }
 
-resource "azurerm_redis_cache" "OldAppDemoRedis" {
+resource "azurerm_redis_cache" "redis" {
   name                = "${var.app_name}-cache"
-  location            = "${azurerm_resource_group.rg.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  location            = "${data.azurerm_resource_group.rg.location}"
+  resource_group_name = "${data.azurerm_resource_group.rg.name}"
   capacity            = 1
   family              = "C"
   sku_name            = "Standard"
