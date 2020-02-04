@@ -52,6 +52,13 @@ resource "azurerm_app_service_plan" "app_plan" {
   }
 }
 
+resource "azurerm_application_insights" "insights" {
+  name                = "${var.app_name}-appinsights"
+  location            = "East US"
+  resource_group_name = "${data.azurerm_resource_group.rg.name}"
+  application_type    = "web"
+}
+
 resource "azurerm_app_service" "appsvc" {
   name                = "${var.app_name}-app-service"
   location            = "${data.azurerm_resource_group.rg.location}"
@@ -63,21 +70,14 @@ resource "azurerm_app_service" "appsvc" {
   }
 
   app_settings = {
-    "SOME_KEY" = "some-value"
+    APPINSIGHTS_INSTRUMENTATIONKEY  = "${azurerm_application_insights.insights.instrumentation_key}"
   }
 
   connection_string {
     name  = "Database"
     type  = "SQLServer"
-    value = " "Server=${data.azurerm_sql_server.sql.fqdn};Database=${azurerm_sql_database.database.name};User Id=nsadmin;Password=NewSignature2020;MultipleActiveResultSets=True;Connection Timeout=60""
+    value = "Server=${azurerm_sql_server.sql.fqdn};Database=${azurerm_sql_database.database.name};User Id=nsadmin;Password=NewSignature2020;MultipleActiveResultSets=True;Connection Timeout=60"
   }
-}
-
-resource "azurerm_application_insights" "insights" {
-  name                = "${var.app_name}-appinsights"
-  location            = "East US"
-  resource_group_name = "${data.azurerm_resource_group.rg.name}"
-  application_type    = "web"
 }
 
 resource "azurerm_redis_cache" "redis" {
