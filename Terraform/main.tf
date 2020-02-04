@@ -1,45 +1,52 @@
+  
 provider "azurerm" {
-
+  version = "=1.36.0"
 }
 
-resource "azurerm_resource_group" "OldAppDemoRG" {
-  name = "OldAppDemoRG"
+terraform {
+  backend "azurerm" {
+  }
+}
+
+variable "app_name" {
+  type = "string"
+}
+
+resource "azurerm_resource_group" "rg" {
+  name = "${var.app_name}"
   location = "East US"
 }
 
 resource "azurerm_sql_server" "OldAppDemosqlserver" {
-  name                         = "oldappdemo-sqlserver"
-  resource_group_name          = "${azurerm_resource_group.OldAppDemoRG.name}"
-  location                     = "${azurerm_resource_group.OldAppDemoRG.location}"
+  name                         = "${var.app_name}-sqlserver"
+  resource_group_name          = "${azurerm_resource_group.rg.name}"
+  location                     = "${azurerm_resource_group.rg.location}"
   version                      = "12.0"
   administrator_login          = "nsadmin"
   administrator_login_password = "NewSignature2020"
 
   tags = {
-    environment = "production"
+    environment = "dev"
   }
 
 }
-output "fully_qualified_domain_name" {
-  value = "${azurerm_sql_server.OldAppDemosqlserver.fully_qualified_domain_name}"
-}
 
-resource "azurerm_app_service_plan" "OldAppDemoPlan" {
-  name                = "OldAppDemoRG-appserviceplan"
-  location            = "${azurerm_resource_group.OldAppDemoRG.location}"
-  resource_group_name = "${azurerm_resource_group.OldAppDemoRG.name}"
+resource "azurerm_app_service_plan" "app_plan" {
+  name                = "${var.app_name}-appserviceplan"
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
 
   sku {
-    tier = "Standard"
-    size = "S1"
+    tier = "Basic"
+    size = "B1"
   }
 }
 
-resource "azurerm_app_service" "OldAppDemoRG" {
-  name                = "OldAppDemoRG-app-service"
-  location            = "${azurerm_resource_group.OldAppDemoRG.location}"
-  resource_group_name = "${azurerm_resource_group.OldAppDemoRG.name}"
-  app_service_plan_id = "${azurerm_app_service_plan.OldAppDemoPlan.id}"
+resource "azurerm_app_service" "appsvc" {
+  name                = "${var.app_name}-app-service"
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  app_service_plan_id = "${azurerm_app_service_plan.app_plan.id}"
 
   site_config {
     dotnet_framework_version = "v4.0"
@@ -56,24 +63,17 @@ resource "azurerm_app_service" "OldAppDemoRG" {
   }
 }
 
-resource "azurerm_application_insights" "OldAppDemoInsights" {
-  name                = "OldAppDemo-appinsights"
+resource "azurerm_application_insights" "insights" {
+  name                = "${var.app_name}-appinsights"
   location            = "East US"
-  resource_group_name = "${azurerm_resource_group.OldAppDemoRG.name}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
   application_type    = "web"
 }
 
-output "instrumentation_key" {
-  value = "${azurerm_application_insights.OldAppDemoInsights.instrumentation_key}"
-}
-
-output "app_id" {
-  value = "${azurerm_application_insights.OldAppDemoInsights.app_id}"
-}
 resource "azurerm_redis_cache" "OldAppDemoRedis" {
-  name                = "OldAppDemo-cache"
-  location            = "${azurerm_resource_group.OldAppDemoRG.location}"
-  resource_group_name = "${azurerm_resource_group.OldAppDemoRG.name}"
+  name                = "${var.app_name}-cache"
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
   capacity            = 1
   family              = "C"
   sku_name            = "Standard"
