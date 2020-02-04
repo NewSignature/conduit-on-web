@@ -38,8 +38,7 @@ steps:
   - task: MSBuild@1
     inputs:
       solution: Src/Todo.Web/*.csproj
-      msbuildArguments: '/t:Publish /p:ProductName="Super Todoer Demo App"
-        /p:PublishDir=output'
+      msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:PackageLocation=$(Build.ArtifactDirectory)/TodoApp.$(Build.BuildId).zip'
       msbuildArchitecture: x64
       configuration: Release
 
@@ -59,6 +58,7 @@ steps:
       rootFolderOrFile: output
       includeRootFolder: false
       archiveFile: $(Build.ArtifactDirectory)/TodoApp.$(Build.BuildId).zip
+    enabled: false
 
   - task: PublishBuildArtifacts@1
     inputs:
