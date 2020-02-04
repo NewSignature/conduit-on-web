@@ -22,7 +22,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Home", "Index", "Main")</li>
                     @if (DependencyResolver.Current.GetService<ISessionContext>().CurrentUser != null)
                     {
                     <li>@Html.ActionLink("My Lists", "Index", "List")</li>
