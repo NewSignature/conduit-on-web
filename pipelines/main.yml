@@ -11,6 +11,9 @@ trigger:
     exclude:
       - "Terraform"
 
+variables: 
+  solution: '*.sln'
+
 pool:
   vmImage: 'windows-latest'
 
