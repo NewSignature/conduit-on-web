@@ -14,53 +14,31 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
-steps:
-  - task: NuGetToolInstaller@1
-    inputs:
-      checkLatest: true
+stages:
+- stage: build
+  displayName: Build
+  jobs: 
+  - job: job_build
+    steps:
+    - task: NuGetToolInstaller@1
 
-  - task: VSBuild@1
-    inputs:
-      solution: Src/TodoApplication.sln
-      vsVersion: latest
-      configuration: Release
-      clean: true
-      msbuildArchitecture: x64
-      restoreNugetPackages: true
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
-  - task: VSTest@2
-    inputs:
-      testSelector: testAssemblies
-      testAssemblyVer2: Src/Todo.Tests/bin/**/*.Tests.dll
-      vsTestVersion: latest
-      codeCoverageEnabled: true
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-  - task: MSBuild@1
-    inputs:
-      solution: Src/Todo.Web/*.csproj
-      msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:PackageLocation=$(Build.ArtifactStagingDirectory)/TodoApp.$(Build.BuildId).zip'
-      msbuildArchitecture: x64
-      configuration: Release
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-  - task: CopyFiles@2
-    inputs:
-      SourceFolder: Src/Todo.Web/bin
-      Contents: |
-        *.dll
-        *.config
-      TargetFolder: output
-      CleanTargetFolder: true
-    enabled: false
-
-  - task: ArchiveFiles@2
-    inputs:
-      archiveType: zip
-      rootFolderOrFile: output
-      includeRootFolder: false
-      archiveFile: $(Build.ArtifactDirectory)/TodoApp.$(Build.BuildId).zip
-    enabled: false
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/TodoApp.$(Build.BuildId).zip
-      ArtifactName: BuildOutput
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: $(Build.ArtifactStagingDirectory)
+        ArtifactName: backend
