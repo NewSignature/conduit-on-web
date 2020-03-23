@@ -18,6 +18,7 @@ variables:
   TerraformBackend.ResourceGroup: rg-conduit-on-web-staging-001
   TerraformBackend.StorageAccount: strconduitonwebtfrm01
   TerraformBackend.ContainerName: staging
+  AzureServiceConnection: nebbia-partner-service-connection
 
 pool:
   vmImage: 'windows-latest'
@@ -57,4 +58,19 @@ stages:
   - job: job_staging
     displayName: 'Staging'
     steps:
-      - bash: echo 'this is happening'
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: $(AzureServiceConnection)
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az group create --location eastus --name $(TerraformBackend.ResourceGroup)
+            
+            az storage account create --name $(TerraformBackend.StorageAccount) --resource-group $(TerraformBackend.ResourceGroup) --location eastus --sku Standard_LRS
+            
+            az storage container create --name staging --account-name $(TerraformBackend.StorageAccount)
+
+            STORAGE_ACCOUNT_KEY=$(az storage account keys list -g $(TerraformBackend.ResourceGroup) -n $(TerraformBackend.StorageAccount) | jq ".[0].value" -r)
+
+            echo "setting storage account key variable"
+            echo "##vso[task.setvariable variable=ARM_ACCESS_KEY;issecret=true]$STORAGE_ACCOUNT_KEY"
