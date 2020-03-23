@@ -15,6 +15,9 @@ variables:
   solution: '*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  TerraformBackend.ResourceGroup: rg-conduit-on-web-staging-001
+  TerraformBackend.StorageAccount: strconduitonwebtfrm01
+  TerraformBackend.ContainerName: staging
 
 pool:
   vmImage: 'windows-latest'
