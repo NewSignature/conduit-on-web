@@ -15,6 +15,7 @@ variables:
   solution: '*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  AppName: 'conduit-on-web'
   TerraformBackend.ResourceGroup: rg-conduit-on-web-staging-001
   TerraformBackend.StorageAccount: strconduitonwebtfrm01
   TerraformBackend.ContainerName: staging
@@ -56,7 +57,7 @@ stages:
   displayName: Staging
   jobs: 
   - job: job_staging_iac
-    displayName: 'Staging'
+    displayName: 'Staging Infrastructure'
     pool: 
       vmImage: 'ubuntu-latest'
     steps:
@@ -76,9 +77,42 @@ stages:
 
             echo "setting storage account key variable"
             echo "##vso[task.setvariable variable=ARM_ACCESS_KEY;issecret=true]$STORAGE_ACCOUNT_KEY"
+      - task: TerraformInstaller@0
+        inputs:
+          terraformVersion: '0.12.20'
+      - task: TerraformTaskV1@0
+        displayName: "Terraform Init"
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: $(AzureServiceConnection)
+          backendAzureRmResourceGroupName: $(TerraformBackend.ResourceGroup)
+          backendAzureRmStorageAccountName: $(TerraformBackend.StorageAccount)
+          backendAzureRmContainerName: '$(TerraformBackend.ContainerName)'
+          backendAzureRmKey: 'infrastructure/terraform.tfstate'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/iac/'
+      - task: TerraformTaskV1@0
+        displayName: "Terraform Plan"
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/iac/'
+          environmentServiceNameAzureRM: $(AzureServiceConnection)
+          commandOptions: |
+            -var "location=eastus" -var "environment=staging" -var "app_name=$(AppName)"
+      - task: TerraformTaskV1@0
+        displayName: "Terraform Apply"
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/iac/'
+          environmentServiceNameAzureRM: $(AzureServiceConnection)
+          commandOptions: |
+            -var "location=eastus" -var "environment=staging" -var "app_name=$(AppName)"
   - job: job_staging_deploy
-    displayName: 'Deploy goes here'
+    displayName: 'Staging Deploy API'
+    dependsOn: ['job_staging_iac']
     pool: 
       vmImage: 'windows-latest'
     steps:
-    - bash: 'deploy goes here'
+    - powershell: echo "deploy goes here"
