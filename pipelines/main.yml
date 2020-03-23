@@ -20,12 +20,11 @@ variables:
   TerraformBackend.ContainerName: staging
   AzureServiceConnection: nebbia-partner-service-connection
 
-pool:
-  vmImage: 'windows-latest'
-
 stages:
 - stage: build
   displayName: Build
+  pool:
+    vmImage: 'windows-latest'
   jobs: 
   - job: job_build
     displayName: 'Build Backend'
@@ -56,12 +55,14 @@ stages:
   displayName: Staging
   jobs: 
   - job: job_staging
+    pool:
+      vmImage: 'windows-latest'
     displayName: 'Staging'
     steps:
       - task: AzureCLI@2
         inputs:
           azureSubscription: $(AzureServiceConnection)
-          scriptType: 'bash'
+          scriptType: 'PowerShell'
           scriptLocation: 'inlineScript'
           inlineScript: |
             az group create --location eastus --name $(TerraformBackend.ResourceGroup)
@@ -70,7 +71,7 @@ stages:
             
             az storage container create --name staging --account-name $(TerraformBackend.StorageAccount)
 
-            STORAGE_ACCOUNT_KEY=$(az storage account keys list -g $(TerraformBackend.ResourceGroup) -n $(TerraformBackend.StorageAccount) | jq ".[0].value" -r)
+            $STORAGE_ACCOUNT_KEY = $(az storage account keys list -g $(TerraformBackend.ResourceGroup) -n $(TerraformBackend.StorageAccount) | jq ".[0].value" -r)
 
             echo "setting storage account key variable"
             echo "##vso[task.setvariable variable=ARM_ACCESS_KEY;issecret=true]$STORAGE_ACCOUNT_KEY"
