@@ -16,7 +16,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   AppName: 'conduit-on-web'
-  TerraformBackend.ResourceGroup: rg-conduit-on-web-staging-001
+  TerraformBackend.ResourceGroup: rg-conduit-on-web-shared-001
   TerraformBackend.StorageAccount: strconduitonwebtfrm01
   TerraformBackend.ContainerName: staging
   AzureServiceConnection: nebbia-partner-service-connection
