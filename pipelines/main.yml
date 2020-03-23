@@ -24,6 +24,7 @@ stages:
   displayName: Build
   jobs: 
   - job: job_build
+    displayName: 'Build Backend'
     steps:
     - task: NuGetToolInstaller@1
 
