@@ -55,8 +55,10 @@ stages:
 - stage: deploy
   displayName: Staging
   jobs: 
-  - job: job_staging
+  - job: job_staging_iac
     displayName: 'Staging'
+    pool: 
+      vmImage: 'ubuntu-latest'
     steps:
       - task: AzureCLI@2
         inputs:
@@ -74,3 +76,9 @@ stages:
 
             echo "setting storage account key variable"
             echo "##vso[task.setvariable variable=ARM_ACCESS_KEY;issecret=true]$STORAGE_ACCOUNT_KEY"
+  - job: job_staging_deploy
+    displayName: 'Deploy goes here'
+    pool: 
+      vmImage: 'windows-latest'
+    steps:
+    - bash: 'deploy goes here'
