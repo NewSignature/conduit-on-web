@@ -42,3 +42,9 @@ stages:
       inputs:
         PathtoPublish: $(Build.ArtifactStagingDirectory)
         ArtifactName: backend
+- stage: deploy
+  displayName: Staging
+  jobs: 
+  - job: job_staging
+    steps:
+      - bash: echo 'this is happening'
