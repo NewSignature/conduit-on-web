@@ -52,5 +52,6 @@ stages:
   displayName: Staging
   jobs: 
   - job: job_staging
+    displayName: 'Staging'
     steps:
       - bash: echo 'this is happening'
