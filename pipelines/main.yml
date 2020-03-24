@@ -9,6 +9,7 @@ trigger:
 
 variables: 
   solution: '*.sln'
+  frontEndDirectory: 'src/conduit-front-end'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   AppName: 'conduit-on-web'
@@ -24,7 +25,7 @@ stages:
 - stage: build
   displayName: Build
   jobs: 
-  - job: job_build
+  - job: job_build_api
     displayName: 'Build Backend'
     steps:
     - task: NuGetToolInstaller@1
@@ -49,9 +50,20 @@ stages:
       inputs:
         PathtoPublish: $(Build.ArtifactStagingDirectory)
         ArtifactName: backend
+  
+  - job: job_build_front_end
+    displayName: 'Build Frontend'
+    pool: 
+      vmImage: 'ubuntu'
+    steps: 
+    - task: Npm@1
+      inputs:
+        command: 'install'
+        workingDir: $(frontEndDirectory)
 
 - stage: deploy
   displayName: Staging
+  dependsOn: ['build']
   jobs: 
   - job: job_staging_iac
     displayName: 'Staging Infrastructure'
