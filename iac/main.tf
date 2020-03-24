@@ -15,7 +15,7 @@ locals {
   application_insights_name = "ai-${var.app_name}-${var.environment}"
   app_service_name = "azapp-${var.app_name}-${var.environment}"
   app_service_plan_name = "azappsp-${var.app_name}-${var.environment}"
-  storage_account_name = "st${local.app_name_alphanumeric}"
+  storage_account_name = "st${local.app_name_alphanumeric}${var.environment}"
 }
 
 resource "azurerm_resource_group" "resource_group" {
