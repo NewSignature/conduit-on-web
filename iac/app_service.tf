@@ -9,7 +9,16 @@ resource "azurerm_app_service" "app_service" {
   }
 
   app_settings = {
-    APPINSIGHTS_INSTRUMENTATIONKEY  = "${azurerm_application_insights.insights.instrumentation_key}"
+    APPINSIGHTS_INSTRUMENTATIONKEY  = "${azurerm_application_insights.insights.instrumentation_key}",
+    APPINSIGHTS_PROFILERFEATURE_VERSION = "1.0.0",
+    APPINSIGHTS_SNAPSHOTFEATURE_VERSION = "1.0.0",
+    APPLICATIONINSIGHTS_CONNECTION_STRING = "InstrumentationKey=${azurerm_application_insights.insights.instrumentation_key}",
+    ApplicationInsightsAgent_EXTENSION_VERSION = "~2",
+    DiagnosticServices_EXTENSION_VERSION = "~3",
+    InstrumentationEngine_EXTENSION_VERSION = "~1",
+    SnapshotDebugger_EXTENSION_VERSION = "~1",
+    XDT_MicrosoftApplicationInsights_BaseExtensions = "~1",
+    XDT_MicrosoftApplicationInsights_Mode = "recommended"
   }
 }
 
