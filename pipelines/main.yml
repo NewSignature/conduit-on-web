@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
   branches:
     include:
@@ -54,6 +49,7 @@ stages:
       inputs:
         PathtoPublish: $(Build.ArtifactStagingDirectory)
         ArtifactName: backend
+
 - stage: deploy
   displayName: Staging
   jobs: 
@@ -63,6 +59,7 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
       - task: AzureCLI@2
+        displayName: "Azure Terraform Backend"
         inputs:
           azureSubscription: $(AzureServiceConnection)
           scriptType: 'bash'
@@ -78,9 +75,11 @@ stages:
 
             echo "setting storage account key variable"
             echo "##vso[task.setvariable variable=ARM_ACCESS_KEY;issecret=true]$STORAGE_ACCOUNT_KEY"
+
       - task: TerraformInstaller@0
         inputs:
           terraformVersion: '0.12.20'
+
       - task: TerraformTaskV1@0
         displayName: "Terraform Init"
         inputs:
@@ -92,6 +91,7 @@ stages:
           backendAzureRmContainerName: '$(TerraformBackend.ContainerName)'
           backendAzureRmKey: 'infrastructure/terraform.tfstate'
           workingDirectory: '$(System.DefaultWorkingDirectory)/iac/'
+
       - task: TerraformTaskV1@0
         displayName: "Terraform Plan"
         inputs:
@@ -101,8 +101,10 @@ stages:
           environmentServiceNameAzureRM: $(AzureServiceConnection)
           commandOptions: |
             -var "location=eastus" -var "environment=staging" -var "app_name=$(AppName)"
+
       - task: TerraformTaskV1@0
         displayName: "Terraform Apply"
+        name:  TerraformApply
         inputs:
           provider: 'azurerm'
           command: 'apply'
@@ -110,10 +112,19 @@ stages:
           environmentServiceNameAzureRM: $(AzureServiceConnection)
           commandOptions: |
             -var "location=eastus" -var "environment=staging" -var "app_name=$(AppName)"
+
+      - bash: |
+          APP_SERVICE_NAME=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.app_service.value' -r)
+          echo "##vso[task.setvariable variable=Outputs.AppServiceName;isOutput=true]$APP_SERVICE_NAME"
+        name: TerraformOutputs
+        displayName: Parsing Terraform Outputs
+
   - job: job_staging_deploy
     displayName: 'Staging Deploy API'
     dependsOn: ['job_staging_iac']
     pool: 
       vmImage: 'windows-latest'
+    variables:
+      appServiceName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppServiceName'] ]
     steps:
-    - powershell: echo "deploy goes here"
+    - powershell: echo "deploy goes here. app service name is $(appServiceName)"
