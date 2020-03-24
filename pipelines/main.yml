@@ -183,7 +183,7 @@ stages:
       artifact: frontend
     - task: AzureFileCopy@4
       inputs:
-        SourcePath: '$(Pipeline.Workspace)/frontend'
+        SourcePath: '$(Pipeline.Workspace)/frontend/*'
         azureSubscription: 'nebbia-partner-service-connection'
         Destination: 'AzureBlob'
         storage: '$(storageAccountName)'
