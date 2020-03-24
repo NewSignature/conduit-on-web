@@ -54,7 +54,7 @@ stages:
   - job: job_build_front_end
     displayName: 'Build Frontend'
     pool: 
-      vmImage: 'ubuntu'
+      vmImage: 'ubuntu-latest'
     steps: 
     - task: Npm@1
       inputs:
