@@ -48,6 +48,7 @@ stages:
 
     - publish: $(Build.ArtifactStagingDirectory)/backend
       artifact: backend
+      displayName: Publish Backend Artifacts
   
   - job: job_build_front_end
     displayName: 'Build Frontend'
@@ -69,6 +70,7 @@ stages:
         customCommand: run build
 
     - task: CopyFiles@2
+      displayName: Copy Files to Artifacts Staging
       inputs:
          sourceFolder: $(frontEndDirectory)/dist
          contents: '**' 
@@ -76,6 +78,7 @@ stages:
         
     - publish: $(Build.ArtifactStagingDirectory)/frontend
       artifact: frontend
+      displayName: Publish Frontend Artifacts
 
 - stage: deploy
   displayName: Staging
