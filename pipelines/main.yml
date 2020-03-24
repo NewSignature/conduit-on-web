@@ -116,10 +116,13 @@ stages:
       - bash: |
           APP_SERVICE_NAME=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.app_service.value' -r)
           echo "##vso[task.setvariable variable=Outputs.AppServiceName;isOutput=true]$APP_SERVICE_NAME"
+
+          STORAGE_ACCOUNT_NAME=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.storage_account.value' -r)
+          echo "##vso[task.setvariable variable=Outputs.StorageAccountName;isOutput=true]$STORAGE_ACCOUNT_NAME"
         name: TerraformOutputs
         displayName: Parsing Terraform Outputs
 
-  - job: job_staging_deploy
+  - job: job_staging_deploy_api
     displayName: 'Staging Deploy API'
     dependsOn: ['job_staging_iac']
     pool: 
@@ -127,4 +130,14 @@ stages:
     variables:
       appServiceName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppServiceName'] ]
     steps:
-    - powershell: echo "deploy goes here. app service name is $(appServiceName)"
+    - powershell: echo "app service deploy goes here. app service name is $(appServiceName)"
+
+  - job: job_staging_deploy_frontend
+    displayName: 'Staging Deploy Frontend'
+    dependsOn: ['job_staging_iac']
+    pool: 
+      vmImage: 'windows-latest'
+    variables:
+      storageAccountName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.StorageAccountName'] ]
+    steps:
+    - powershell: echo "storage account deploy goes here. storage account name is $(storageAccountName)"
