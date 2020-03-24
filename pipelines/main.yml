@@ -162,8 +162,16 @@ stages:
       appServiceName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppServiceName'] ]
     steps:
     - download: current
-      artifact: backend
-    - powershell: echo "app service deploy goes here. app service name is $(appServiceName)"
+      artifact: backend    
+    - powershell: |
+        ls $(Pipeline.Workspace)/backend
+    # - task: AzureRmWebAppDeployment@4
+    #   inputs:
+    #     ConnectionType: 'AzureRM'
+    #     azureSubscription: 'nebbia-partner-service-connection'
+    #     appType: 'webApp'
+    #     WebAppName: 'azapp-useridentitytest-cmd-001-webapp'
+    #     packageForLinux: '$(Pipeline.Workspace)/backend'
 
   - job: job_staging_deploy_frontend
     displayName: 'Staging Deploy Frontend'
@@ -175,7 +183,10 @@ stages:
     steps:
     - download: current
       artifact: frontend
-    - powershell: echo "storage account deploy goes here. storage account name is $(storageAccountName)"
-    - powershell: |
-        echo "artifacts are here"
-        ls $(Pipeline.Workspace)/
+    - task: AzureFileCopy@4
+      inputs:
+        SourcePath: '$(Pipeline.Workspace)/frontend'
+        azureSubscription: 'nebbia-partner-service-connection'
+        Destination: 'AzureBlob'
+        storage: '$(storageAccountName)'
+        ContainerName: '$web'
