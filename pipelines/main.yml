@@ -161,6 +161,7 @@ stages:
     variables:
       appServiceName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppServiceName'] ]
     steps:
+    - checkout: none
     - download: current
       artifact: backend    
     - task: AzureRmWebAppDeployment@4
@@ -179,6 +180,7 @@ stages:
     variables:
       storageAccountName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.StorageAccountName'] ]
     steps:
+    - checkout: none
     - download: current
       artifact: frontend
     - task: AzureFileCopy@4
