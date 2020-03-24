@@ -163,13 +163,13 @@ stages:
     steps:
     - download: current
       artifact: backend    
-    - task: AzureWebApp@1
+    - task: AzureRmWebAppDeployment@4
       inputs:
+        ConnectionType: 'AzureRM'
         azureSubscription: 'nebbia-partner-service-connection'
         appType: 'webApp'
-        appName: '$(appServiceName)'
-        package: '$(Pipeline.Workspace)/backend/*.zip'
-        deploymentMethod: 'auto'
+        WebAppName: '$(appServiceName)'
+        packageForLinux: '$(Pipeline.Workspace)/backend/*.zip'
 
   - job: job_staging_deploy_frontend
     displayName: 'Staging Deploy Frontend'
@@ -188,4 +188,3 @@ stages:
         Destination: 'AzureBlob'
         storage: '$(storageAccountName)'
         ContainerName: '$web'
-
