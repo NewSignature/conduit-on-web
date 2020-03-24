@@ -10,6 +10,7 @@ trigger:
   paths:
     exclude:
       - pipelines/*
+      - iac/*
 
 variables: 
   solution: '*.sln'
