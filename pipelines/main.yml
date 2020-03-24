@@ -161,6 +161,8 @@ stages:
     variables:
       appServiceName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppServiceName'] ]
     steps:
+    - download: current
+      artifact: backend
     - powershell: echo "app service deploy goes here. app service name is $(appServiceName)"
 
   - job: job_staging_deploy_frontend
@@ -171,4 +173,9 @@ stages:
     variables:
       storageAccountName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.StorageAccountName'] ]
     steps:
+    - download: current
+      artifact: frontend
     - powershell: echo "storage account deploy goes here. storage account name is $(storageAccountName)"
+    - powershell: |
+        echo "artifacts are here"
+        ls $(Pipeline.Workspace)/
