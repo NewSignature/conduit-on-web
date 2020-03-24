@@ -56,10 +56,19 @@ stages:
     pool: 
       vmImage: 'ubuntu-latest'
     steps: 
+      
     - task: Npm@1
+      displayName: 'Restore'
       inputs:
         command: 'install'
         workingDir: $(frontEndDirectory)
+
+    - task: Npm@1
+      displayName: 'Build'
+      inputs:
+        command: 'custom'
+        workingDir: $(frontEndDirectory)
+        customCommand: run build
 
 - stage: deploy
   displayName: Staging
