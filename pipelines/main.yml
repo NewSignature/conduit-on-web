@@ -37,7 +37,7 @@ stages:
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/backend"'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
@@ -46,17 +46,15 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: $(Build.ArtifactStagingDirectory)
-        ArtifactName: backend
+    - publish: $(Build.ArtifactStagingDirectory)/backend
+      artifact: backend
   
   - job: job_build_front_end
     displayName: 'Build Frontend'
     pool: 
       vmImage: 'ubuntu-latest'
     steps: 
-      
+
     - task: Npm@1
       displayName: 'Restore'
       inputs:
@@ -69,6 +67,15 @@ stages:
         command: 'custom'
         workingDir: $(frontEndDirectory)
         customCommand: run build
+
+    - task: CopyFiles@2
+      inputs:
+         sourceFolder: $(frontEndDirectory)/dist
+         contents: '**' 
+         targetFolder: $(Build.ArtifactStagingDirectory)/frontend
+        
+    - publish: $(Build.ArtifactStagingDirectory)/frontend
+      artifact: frontend
 
 - stage: deploy
   displayName: Staging
