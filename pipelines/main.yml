@@ -152,7 +152,7 @@ stages:
           echo "##vso[task.setvariable variable=Outputs.StorageAccountName;isOutput=true]$STORAGE_ACCOUNT_NAME"
 
           APP_INSIGHTS_INSTRUMENTATION=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.app_insights_instrumentation_key.value' -r)
-          echo "##vso[task.setvariable variable=Outputs.AppInsightsInstrumentationKey;isOutput=true]$APP_INSIGHTS_INSTRUMENTATION_KEY"
+          echo "##vso[task.setvariable variable=Outputs.AppInsightsInstrumentationKey;isOutput=true]$APP_INSIGHTS_INSTRUMENTATION"
 
         name: TerraformOutputs
         displayName: Parsing Terraform Outputs
