@@ -192,8 +192,8 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          Write-Host $(appInsightsInstrumentationKey)
-          ((Get-Content -path $(Pipeline.Workspace)/frontend/index.html -Raw) -replace 'INSTRUMENTATION_KEY',$(appInsightsInstrumentationKey)) | Set-Content -Path $(Pipeline.Workspace)/frontend/index.html
+          Write-Host "Using App Insights: $($env:appInsightsInstrumentationKey)"
+          ((Get-Content -path $(Pipeline.Workspace)/frontend/index.html -Raw) -replace 'INSTRUMENTATION_KEY', "$($env:appInsightsInstrumentationKey)") | Set-Content -Path $(Pipeline.Workspace)/frontend/index.html
     - task: AzureFileCopy@4
       inputs:
         SourcePath: '$(Pipeline.Workspace)/frontend/*'
