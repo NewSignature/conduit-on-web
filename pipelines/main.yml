@@ -193,7 +193,7 @@ stages:
         targetType: 'inline'
         script: |
           Write-Host "Using App Insights: env $($env:appInsightsInstrumentationKey) var $(appInsightsInstrumentationKey)"
-          Write-Host "Output: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppInsightsInstrumentationKey']"
+          Write-Host "Output: $($[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppInsightsInstrumentationKey'])"
           ((Get-Content -path $(Pipeline.Workspace)/frontend/index.html -Raw) -replace 'INSTRUMENTATION_KEY', "$($env:appInsightsInstrumentationKey)") | Set-Content -Path $(Pipeline.Workspace)/frontend/index.html
     - task: AzureFileCopy@4
       inputs:
