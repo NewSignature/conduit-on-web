@@ -192,9 +192,8 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          # Write your PowerShell commands here.
-          
-          ((Get-Content -path $(Pipeline.Workspace)/frontend/index.html -Raw) -replace 'INSTRUMENTATION_KEY','$(appInsightsInstrumentationKey)') | Set-Content -Path $(Pipeline.Workspace)/frontend/index.html
+          Write-Host $(appInsightsInstrumentationKey)
+          ((Get-Content -path $(Pipeline.Workspace)/frontend/index.html -Raw) -replace 'INSTRUMENTATION_KEY',$(appInsightsInstrumentationKey)) | Set-Content -Path $(Pipeline.Workspace)/frontend/index.html
     - task: AzureFileCopy@4
       inputs:
         SourcePath: '$(Pipeline.Workspace)/frontend/*'
