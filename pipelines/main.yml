@@ -151,8 +151,8 @@ stages:
           STORAGE_ACCOUNT_NAME=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.storage_account.value' -r)
           echo "##vso[task.setvariable variable=Outputs.StorageAccountName;isOutput=true]$STORAGE_ACCOUNT_NAME"
 
-          APP_INSIGHTS_INSTRUMENTATION=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.app_insights_instrumentation_key.value' -r)
-          echo "##vso[task.setvariable variable=Outputs.AppInsightsInstrumentationKey;isOutput=true]$APP_INSIGHTS_INSTRUMENTATION"
+          APP_INSIGHTS_INSTRUMENTATION_KEY=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.app_insights_instrumentation_key.value' -r)
+          echo "##vso[task.setvariable variable=Outputs.AppInsightsInstrumentationKey;isOutput=true]$APP_INSIGHTS_INSTRUMENTATION_KEY"
 
         name: TerraformOutputs
         displayName: Parsing Terraform Outputs
@@ -192,8 +192,6 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          Write-Host "Using App Insights: env $($env:appInsightsInstrumentationKey) var $(appInsightsInstrumentationKey)"
-          Write-Host "Output: $($[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppInsightsInstrumentationKey'])"
           ((Get-Content -path $(Pipeline.Workspace)/frontend/index.html -Raw) -replace 'INSTRUMENTATION_KEY', "$($env:appInsightsInstrumentationKey)") | Set-Content -Path $(Pipeline.Workspace)/frontend/index.html
     - task: AzureFileCopy@4
       inputs:
