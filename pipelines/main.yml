@@ -150,6 +150,10 @@ stages:
 
           STORAGE_ACCOUNT_NAME=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.storage_account.value' -r)
           echo "##vso[task.setvariable variable=Outputs.StorageAccountName;isOutput=true]$STORAGE_ACCOUNT_NAME"
+
+          APP_INSIGHTS_INSTRUMENTATION=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.app_insights_instrumentation_key.value' -r)
+          echo "##vso[task.setvariable variable=Outputs.AppInsightsInstrumentationKey;isOutput=true]$APP_INSIGHTS_INSTRUMENTATION_KEY"
+
         name: TerraformOutputs
         displayName: Parsing Terraform Outputs
 
@@ -179,10 +183,18 @@ stages:
       vmImage: 'windows-latest'
     variables:
       storageAccountName: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.StorageAccountName'] ]
+      appInsightsInstrumentationKey: $[ dependencies.job_staging_iac.outputs['TerraformOutputs.Outputs.AppInsightsInstrumentationKey'] ]
     steps:
     - checkout: none
     - download: current
       artifact: frontend
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          
+          ((Get-Content -path $(Pipeline.Workspace)/frontend/index.html -Raw) -replace 'INSTRUMENTATION_KEY','$(appInsightsInstrumentationKey)') | Set-Content -Path $(Pipeline.Workspace)/frontend/index.html
     - task: AzureFileCopy@4
       inputs:
         SourcePath: '$(Pipeline.Workspace)/frontend/*'
