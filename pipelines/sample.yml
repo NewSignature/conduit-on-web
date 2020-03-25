@@ -11,24 +11,23 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: stage_build
-  displayName: Build
+- stage: stage_deploy
+  displayName: Production
   jobs: 
-  - job: job_build
-    displayName: Some Build Job
+  - job: job_deploy_infrastructure
+    displayName: Deploy Some Infrastructure
     steps:
     - bash: |
         echo "this is some build job"
         echo "creating a pipeline variable"
         SOMEVALUE="bleh"
         echo "##vso[task.setvariable variable=someName;isOutput=true;]$SOMEVALUE"
-- stage: stage_deploy
-  displayName: Staging
-  variables: 
-    someName: $[ dependencies.job_build.outputs['someName'] ]
-  jobs: 
-  - job: job_deploy
-    displayName: Some Deploy Job
+        echo "variable value is $(someName)"
+  - job: job_deploy_code
+    displayName: Deploy Some Code
+    dependsOn: ['job_deploy_infrastructure']
+    variables: 
+      someName: $[ dependencies.job_deploy_infrastructure.outputs['someName'] ]
     steps: 
     - bash: |
         "the variable value is $(someName)"
