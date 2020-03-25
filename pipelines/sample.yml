@@ -1,0 +1,34 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    exclude:
+      - pipelines/*
+      - iac/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: stage_build
+  displayName: Build
+  jobs: 
+  - job: job_build
+    displayName: Some Build Job
+    steps:
+    - bash: |
+        echo "this is some build job"
+        echo "creating a pipeline variable"
+        SOMEVALUE="bleh"
+        echo "##vso[task.setvariable variable=someName;isOutput=true;]$SOMEVALUE"
+- stage: stage_deploy
+  displayName: Staging
+  variables: 
+    someName: $[ dependencies.job_build.outputs['someName'] ]
+  jobs: 
+  - job: job_deploy
+    displayName: Some Deploy Job
+    steps: 
+    - bash: |
+        "the variable value is $(someName)"
