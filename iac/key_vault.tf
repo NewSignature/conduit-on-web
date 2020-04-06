@@ -13,7 +13,7 @@ resource "azurerm_key_vault" "key_vault" {
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+    object_id = azurerm_app_service.app_service.identity.0.principal_id
 
     key_permissions = [
       "get",
@@ -31,9 +31,5 @@ resource "azurerm_key_vault" "key_vault" {
   network_acls {
     default_action = "Deny"
     bypass         = "AzureServices"
-  }
-
-  tags = {
-    environment = "Testing"
   }
 }
