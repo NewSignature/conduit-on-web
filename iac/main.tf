@@ -29,6 +29,6 @@ resource "azurerm_resource_group" "resource_group" {
 
   tags = {
     projectName = "Demo"
-    owner = "Facundo"
+    owner = "Facundo Gauna"
   }
 }
